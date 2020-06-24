@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Api", "NetCoreApiBase.Api\NetCoreApiBase.Api.csproj", "{3CA8E452-611C-494B-ABC5-26D96ABF1E62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Domain", "NetCoreApiBase.Domain\NetCoreApiBase.Domain.csproj", "{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CA8E452-611C-494B-ABC5-26D96ABF1E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CA8E452-611C-494B-ABC5-26D96ABF1E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CA8E452-611C-494B-ABC5-26D96ABF1E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CA8E452-611C-494B-ABC5-26D96ABF1E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {334158B8-5C74-4CAF-B93E-A52E0DDE05F2}
+	EndGlobalSection
+EndGlobal
