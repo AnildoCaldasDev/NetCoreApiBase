@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreApiBase.Domain\NetCoreApiBase.Domain.csproj" />
+    <ProjectReference Include="..\NetCoreApiBase.Repository\NetCoreApiBase.Repository.csproj" />
   </ItemGroup>
 
 

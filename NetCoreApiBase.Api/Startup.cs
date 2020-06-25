@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using NetCoreApiBase.Domain;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace NetCoreApiBase.Api
 {
@@ -26,7 +27,9 @@ namespace NetCoreApiBase.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            //services.AddCors();
+            services.ConfigureCors();//added
+            services.ConfigureIISIntegration();//added
 
             services.AddResponseCompression(options =>
             {
@@ -37,6 +40,7 @@ namespace NetCoreApiBase.Api
             //add cache to all API. Be aware to use this.
             //services.AddResponseCaching();
 
+            services.ConfigureRepositoryWrapper();
 
             services.AddControllers();
 
@@ -90,6 +94,14 @@ namespace NetCoreApiBase.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -103,11 +115,11 @@ namespace NetCoreApiBase.Api
 
             app.UseRouting();
 
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-            );
+            //app.UseCors(x => x
+            //    .AllowAnyOrigin()
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //);
 
             app.UseAuthentication();
 

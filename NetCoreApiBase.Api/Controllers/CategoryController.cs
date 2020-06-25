@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using NetCoreApiBase.Contracts;
 using NetCoreApiBase.Domain;
 using NetCoreApiBase.Domain.Models;
 using System;
@@ -26,9 +27,12 @@ namespace netcore3_api_basicproject.Controllers
 
         private readonly RepositoryContext context;
 
-        public CategoryController(RepositoryContext _context)
+        private IRepositoryWrapper _repoWrapper;
+
+        public CategoryController(RepositoryContext _context, IRepositoryWrapper repoWrapper)
         {
             this.context = _context;
+            this._repoWrapper = repoWrapper;
         }
 
 
@@ -40,7 +44,9 @@ namespace netcore3_api_basicproject.Controllers
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<ActionResult<List<Category>>> Get()
         {
-            var categories = await context.Categories.AsNoTracking().ToListAsync();
+            var categories = _repoWrapper.Category.FindAll();
+
+            //var categories = await context.Categories.AsNoTracking().ToListAsync();
             return Ok(categories);
         }
 
@@ -76,9 +82,6 @@ namespace netcore3_api_basicproject.Controllers
             {
                 return BadRequest(new { message = "Não foi possivel inserir a categoria" });
             }
-
-
-
         }
 
         [HttpPut]

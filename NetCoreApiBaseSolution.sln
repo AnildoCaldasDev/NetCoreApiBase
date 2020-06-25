@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Api", "NetCoreApiBase.Api\NetCoreApiBase.Api.csproj", "{3CA8E452-611C-494B-ABC5-26D96ABF1E62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Api", "NetCoreApiBase.Api\NetCoreApiBase.Api.csproj", "{3CA8E452-611C-494B-ABC5-26D96ABF1E62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Domain", "NetCoreApiBase.Domain\NetCoreApiBase.Domain.csproj", "{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Domain", "NetCoreApiBase.Domain\NetCoreApiBase.Domain.csproj", "{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Contracts", "NetCoreApiBase.Contracts\NetCoreApiBase.Contracts.csproj", "{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Repository", "NetCoreApiBase.Repository\NetCoreApiBase.Repository.csproj", "{B46A0680-F12F-44CD-9FF2-1980DA8873B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
