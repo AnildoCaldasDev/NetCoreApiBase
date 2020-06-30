@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NetCoreApiBase.Api;
 using NetCoreApiBase.Api.Services;
+using NetCoreApiBase.Contracts;
 using NetCoreApiBase.Domain;
+using NetCoreApiBase.Domain.DTO;
 using NetCoreApiBase.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -16,39 +19,49 @@ namespace netcore3_api_basicproject.Controllers
     [Route("v1/users")]
     public class UserController : ControllerBase
     {
-        private readonly RepositoryContext context;
-        private readonly AppSettings appSettings;
+        private readonly RepositoryContext _context;
+        private readonly AppSettings _appSettings;
+        private IRepositoryWrapper _repoWrapper;
+        private IMapper _mapper;
 
-        public UserController(RepositoryContext _context, IOptions<AppSettings> _appSettings)
+        public UserController(RepositoryContext context,
+                              IOptions<AppSettings> appSettings,
+                              IRepositoryWrapper repoWrapper,
+                              IMapper mapper)
         {
-            this.context = _context;
-            this.appSettings = _appSettings.Value;
+            this._context = context;
+            this._appSettings = appSettings.Value;
+            this._repoWrapper = repoWrapper;
+            this._mapper = mapper;
         }
 
         [HttpPost]
         [Route("")]
         [AllowAnonymous]
-        public async Task<ActionResult<User>> Post([FromBody] User model)
+        public async Task<ActionResult<UserDto>> Post([FromBody] UserDto model)
         {
-
             if (!ModelState.IsValid)
-                return BadRequest(model);
+                return BadRequest(ModelState);
+
+            if (model == null)
+                return BadRequest("Usuário não foi informado!");
 
             model.Role = "Employee";
 
             try
             {
-                context.Users.Add(model);
-                await context.SaveChangesAsync();
+                var userDomain = this._mapper.Map<User>(model);
+                _context.Users.Add(userDomain);
+                await _context.SaveChangesAsync();
 
-                model.Password = "";
+                userDomain.Password = "";
 
-                return Ok(model);
+                return Ok(this._mapper.Map<UserDto>(userDomain));
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest(new { message = "Não foi possivel criar o usuario" });
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
 
@@ -56,32 +69,49 @@ namespace netcore3_api_basicproject.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] User model)
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] UserDto model)
         {
-            var user = await context.
+            if (model == null)
+                return BadRequest("Usuário não foi informado!");
+
+            try
+            {
+                var user = await _context.
                                Users.
-                      AsNoTracking().
-                      Where(x => x.Username.ToUpper() == model.Username.ToUpper() && x.Password.ToUpper() == model.Password)
-                      .FirstOrDefaultAsync();
+                               AsNoTracking().
+                               Where(x => x.Username.ToUpper() == model.Username.ToUpper() &&
+                                  x.Password.ToUpper() == model.Password).
+                               FirstOrDefaultAsync();
 
-            if (user == null)
-                return NotFound(new { message = "Usuário ou senha inválidos!" });
+                if (user == null)
+                    return NotFound(new { message = "Usuário ou senha inválidos!" });
 
-            var token = TokenService.GenerateToken(model, this.appSettings);
+                var token = TokenService.GenerateToken(this._mapper.Map<User>(model), this._appSettings);
 
-            user.Password = "";
+                user.Password = "";
+                return Ok(new { user = this._mapper.Map<UserDto>(user), token = token });
 
-            return Ok(new { user = user, token = token });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
         }
 
         [HttpGet]
         [Route("")]
         [Authorize(Roles = "Manager")]
-        public async Task<ActionResult<List<User>>> Get() {
-
-            var users = await context.Users.AsNoTracking().ToListAsync();
-
-            return Ok(users);
+        public async Task<ActionResult<List<UserDto>>> Get()
+        {
+            try
+            {
+                var users = await _context.Users.AsNoTracking().ToListAsync();
+                return Ok(this._mapper.Map<IEnumerable<UserDto>>(users));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
         }
 
         // METHODS ONLY FOR TESTS:

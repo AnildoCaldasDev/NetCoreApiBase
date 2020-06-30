@@ -9,36 +9,36 @@ namespace NetCoreApiBase.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected RepositoryContext repositoryContext { get; set; }
+        protected RepositoryContext _repositoryContext { get; set; }
 
-        public RepositoryBase(RepositoryContext _repositoryContext)
+        public RepositoryBase(RepositoryContext repositoryContext)
         {
-            this.repositoryContext = _repositoryContext;
+            this._repositoryContext = repositoryContext;
         }
 
         public IQueryable<T> FindAll()
         {
-            return this.repositoryContext.Set<T>().AsNoTracking();
+            return this._repositoryContext.Set<T>().AsNoTracking();
         }
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return this.repositoryContext.Set<T>().Where(expression).AsNoTracking();
+            return this._repositoryContext.Set<T>().Where(expression).AsNoTracking();
         }
 
         public void Create(T entity)
         {
-            this.repositoryContext.Set<T>().Add(entity);
+            this._repositoryContext.Set<T>().Add(entity);
         }
 
         public void Update(T entity)
         {
-            this.repositoryContext.Set<T>().Update(entity);
+            this._repositoryContext.Set<T>().Update(entity);
         }
 
         public void Delete(T entity)
         {
-            this.repositoryContext.Set<T>().Remove(entity);
+            this._repositoryContext.Set<T>().Remove(entity);
         }
     }
 }

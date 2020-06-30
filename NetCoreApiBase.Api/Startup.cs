@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using NetCoreApiBase.Domain;
 using Microsoft.AspNetCore.HttpOverrides;
+using AutoMapper;
 
 namespace NetCoreApiBase.Api
 {
@@ -43,6 +44,8 @@ namespace NetCoreApiBase.Api
             services.ConfigureRepositoryWrapper();
 
             services.AddControllers();
+
+            services.AddAutoMapper(typeof(Startup));
 
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
