@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using NetCoreApiBase.Contracts;
-using NetCoreApiBase.Domain;
 using NetCoreApiBase.Domain.DTO;
 using NetCoreApiBase.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace netcore3_api_basicproject.Controllers
@@ -26,15 +26,12 @@ namespace netcore3_api_basicproject.Controllers
     [Route("v1/categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly RepositoryContext _context;
         private IRepositoryWrapper _repoWrapper;
         private IMapper _mapper;
 
-        public CategoryController(RepositoryContext context,
-                                  IRepositoryWrapper repoWrapper,
+        public CategoryController(IRepositoryWrapper repoWrapper,
                                   IMapper mapper)
         {
-            this._context = context;
             this._repoWrapper = repoWrapper;
             this._mapper = mapper;
         }
@@ -51,10 +48,10 @@ namespace netcore3_api_basicproject.Controllers
             {
                 //para trazer dados com paginação do asp.net core:
                 //https://code-maze.com/paging-aspnet-core-webapi/
-                var categories = _repoWrapper.Category.FindAll();
-                //var categories = await context.Categories.AsNoTracking().ToListAsync();
-
                 //exemplos do automapper: https://code-maze.com/automapper-net-core/
+
+
+                var categories = await _repoWrapper.Category.FindAllAsync();
                 var categoriesResult = _mapper.Map<IEnumerable<CategoryDto>>(categories);
 
                 return Ok(categoriesResult);
@@ -73,10 +70,13 @@ namespace netcore3_api_basicproject.Controllers
         {
             try
             {
-                var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-                if (category == null)
+
+                var categories = await this._repoWrapper.Category.FindByConditionAsync(x => x.Id == id);
+
+                if (categories == null || categories.Count() <= 0)
                     return NotFound(new { message = "Categoria não encontrada" });
-                return Ok(this._mapper.Map<CategoryDto>(category));
+
+                return Ok(this._mapper.Map<CategoryDto>(categories.FirstOrDefault()));
             }
             catch (Exception ex)
             {
@@ -100,9 +100,7 @@ namespace netcore3_api_basicproject.Controllers
             {
                 var categoryDomain = this._mapper.Map<Category>(model);
 
-                _context.Categories.Add(categoryDomain);
-                await _context.SaveChangesAsync();
-
+                await _repoWrapper.Category.Create(categoryDomain);
 
                 return Ok(this._mapper.Map<CategoryDto>(categoryDomain));
             }
@@ -130,8 +128,7 @@ namespace netcore3_api_basicproject.Controllers
             {
                 var categoryDomain = this._mapper.Map<Category>(model);
 
-                _context.Entry<Category>(categoryDomain).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+               await _repoWrapper.Category.Update(categoryDomain);
 
                 return Ok(this._mapper.Map<Category>(categoryDomain));
             }
@@ -147,27 +144,26 @@ namespace netcore3_api_basicproject.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [AllowAnonymous]
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
-            if (category == null)
+            var categories = await _repoWrapper.Category.FindByConditionAsync(x => x.Id == id);
+            if (categories == null)
                 return NotFound(new { message = "Categoria não encontrada" });
 
             //TODO:
             //fazer a amarração da tabela de categoria e da tabela de produto para não permitir a
             //exclusão física. e depois gerar o banco novamente.
 
+            bool existsCategoryWithProduct = await _repoWrapper.Product.ExistsProductsByCategoryId(id);
 
-            if (_repoWrapper.Product.ExistsProductsByCategoryId(id))
+            if (existsCategoryWithProduct)
                 return BadRequest("Categoria está atrelada a um produto e não pode ser removida!");
 
             try
             {
 
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
+                await _repoWrapper.Category.Delete(categories.FirstOrDefault());
                 return Ok(new { message = "Categoria removida com sucesso!" });
             }
             catch (DbUpdateConcurrencyException)

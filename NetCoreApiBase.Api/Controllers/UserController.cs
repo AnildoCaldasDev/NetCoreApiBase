@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NetCoreApiBase.Api;
 using NetCoreApiBase.Api.Services;
 using NetCoreApiBase.Contracts;
-using NetCoreApiBase.Domain;
 using NetCoreApiBase.Domain.DTO;
 using NetCoreApiBase.Domain.Models;
 using System;
@@ -19,17 +17,14 @@ namespace netcore3_api_basicproject.Controllers
     [Route("v1/users")]
     public class UserController : ControllerBase
     {
-        private readonly RepositoryContext _context;
         private readonly AppSettings _appSettings;
         private IRepositoryWrapper _repoWrapper;
         private IMapper _mapper;
 
-        public UserController(RepositoryContext context,
-                              IOptions<AppSettings> appSettings,
+        public UserController(IOptions<AppSettings> appSettings,
                               IRepositoryWrapper repoWrapper,
                               IMapper mapper)
         {
-            this._context = context;
             this._appSettings = appSettings.Value;
             this._repoWrapper = repoWrapper;
             this._mapper = mapper;
@@ -51,8 +46,7 @@ namespace netcore3_api_basicproject.Controllers
             try
             {
                 var userDomain = this._mapper.Map<User>(model);
-                _context.Users.Add(userDomain);
-                await _context.SaveChangesAsync();
+                await _repoWrapper.User.Create(userDomain);
 
                 userDomain.Password = "";
 
@@ -76,17 +70,17 @@ namespace netcore3_api_basicproject.Controllers
 
             try
             {
-                var user = await _context.
-                               Users.
-                               AsNoTracking().
-                               Where(x => x.Username.ToUpper() == model.Username.ToUpper() &&
-                                  x.Password.ToUpper() == model.Password).
-                               FirstOrDefaultAsync();
+                var users = await _repoWrapper.
+                               User.
+                               FindByConditionAsync(x => x.Username.ToUpper() == model.Username.ToUpper() &&
+                                  x.Password.ToUpper() == model.Password);
 
-                if (user == null)
+                if (users == null || users.Count() <= 0)
                     return NotFound(new { message = "Usuário ou senha inválidos!" });
 
-                var token = TokenService.GenerateToken(this._mapper.Map<User>(model), this._appSettings);
+                var token = TokenService.GenerateToken(this._mapper.Map<User>(users.FirstOrDefault()), this._appSettings);
+
+                var user = users.FirstOrDefault();
 
                 user.Password = "";
                 return Ok(new { user = this._mapper.Map<UserDto>(user), token = token });
@@ -105,7 +99,7 @@ namespace netcore3_api_basicproject.Controllers
         {
             try
             {
-                var users = await _context.Users.AsNoTracking().ToListAsync();
+                var users = await _repoWrapper.User.FindAllAsync();
                 return Ok(this._mapper.Map<IEnumerable<UserDto>>(users));
             }
             catch (Exception ex)

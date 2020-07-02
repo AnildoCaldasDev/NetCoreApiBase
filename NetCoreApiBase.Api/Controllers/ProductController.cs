@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using NetCoreApiBase.Contracts;
-using NetCoreApiBase.Domain;
 using NetCoreApiBase.Domain.DTO;
 using NetCoreApiBase.Domain.Models;
 using System;
@@ -18,16 +17,13 @@ namespace netcore3_api_basicproject.Controllers
     public class ProductController : ControllerBase
     {
 
-        private readonly RepositoryContext _context;
         private IRepositoryWrapper _repoWrapper;
         private IMapper _mapper;
 
-        public ProductController(RepositoryContext context,
-                                 IRepositoryWrapper repositoryWrapper,
+        public ProductController(IRepositoryWrapper repositoryWrapper,
                                  IMapper mapper)
         {
-            this._context = context;
-            this._repoWrapper = repositoryWrapper;
+           _repoWrapper = repositoryWrapper;
             this._mapper = mapper;
         }
 
@@ -38,18 +34,11 @@ namespace netcore3_api_basicproject.Controllers
         {
             try
             {
-                //var products = await context.
-                //                    Products.
-                //                    Include(x => x.Category).
-                //                    AsNoTracking().
-                //                    ToListAsync();
-
-                var products = this._repoWrapper.
+               var products = await this._repoWrapper.
                                     Product.
                                     FindAll().
                                     Include(x => x.Category).
-                                    AsNoTracking().
-                                    ToList();
+                                    ToListAsync();
 
                 var productsDtoList = this._mapper.Map<IEnumerable<ProductDto>>(products);
 
@@ -68,10 +57,10 @@ namespace netcore3_api_basicproject.Controllers
         {
             try
             {
-                var product = await _context.
-                                   Products.
+                var product = await _repoWrapper.
+                                   Product.
+                                   FindAll().
                                    Include(x => x.Category).
-                                   AsNoTracking().
                                    FirstOrDefaultAsync(x => x.Id == id);
 
                 if (product == null)
@@ -94,10 +83,10 @@ namespace netcore3_api_basicproject.Controllers
         {
             try
             {
-                var products = await _context.
-                                    Products.
+                var products = await _repoWrapper.
+                                    Product.
+                                    FindAll().
                                     Include(x => x.Category).
-                                    AsNoTracking().
                                     Where(x => x.CategoryId == id).
                                     ToListAsync();
 
@@ -111,7 +100,6 @@ namespace netcore3_api_basicproject.Controllers
 
         [HttpPost]
         [Route("")]
-        //[AllowAnonymous]
         [Authorize(Roles = "Manager")]
         public async Task<ActionResult<ProductDto>> Post([FromBody] ProductDto model)
         {
@@ -125,8 +113,7 @@ namespace netcore3_api_basicproject.Controllers
             {
                 var productDomain = this._mapper.Map<Product>(model);
 
-                _context.Products.Add(productDomain);
-                await _context.SaveChangesAsync();
+               await _repoWrapper.Product.Create(productDomain);
 
                 return Ok(this._mapper.Map<ProductDto>(productDomain));
             }
@@ -155,8 +142,8 @@ namespace netcore3_api_basicproject.Controllers
             {
                 var productDomain = this._mapper.Map<Product>(model);
 
-                _context.Entry<Product>(productDomain).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                await _repoWrapper.Product.Update(productDomain);
+
                 return Ok(this._mapper.Map<ProductDto>(productDomain));
             }
             catch (DbUpdateConcurrencyException)
@@ -174,16 +161,16 @@ namespace netcore3_api_basicproject.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<ActionResult<ProductDto>> Delete(int id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var products = await _repoWrapper.Product.FindByConditionAsync(x => x.Id == id);
 
-            if (product == null)
+            if (products == null || products.Count() <= 0)
                 return NotFound(new { message = "Produto não encontrado" });
 
             try
             {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-                return Ok(this._mapper.Map<ProductDto>(product));
+               await _repoWrapper.Product.Delete(products.FirstOrDefault());
+
+                return Ok(this._mapper.Map<ProductDto>(products.FirstOrDefault()));
             }
             catch (DbUpdateConcurrencyException)
             {

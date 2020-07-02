@@ -2,7 +2,7 @@
 
 namespace NetCoreApiBase.Domain.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Create_Tables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

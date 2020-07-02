@@ -1,8 +1,6 @@
 ﻿using NetCoreApiBase.Contracts;
 using NetCoreApiBase.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace NetCoreApiBase.Repository
 {
@@ -54,10 +52,9 @@ namespace NetCoreApiBase.Repository
             _repositoryContext = repositoryContext;
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _repositoryContext.SaveChanges();
+            await _repositoryContext.SaveChangesAsync();
         }
-
     }
 }

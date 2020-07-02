@@ -4,6 +4,7 @@ using NetCoreApiBase.Domain;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace NetCoreApiBase.Repository
 {
@@ -16,6 +17,7 @@ namespace NetCoreApiBase.Repository
             this._repositoryContext = repositoryContext;
         }
 
+
         public IQueryable<T> FindAll()
         {
             return this._repositoryContext.Set<T>().AsNoTracking();
@@ -26,19 +28,22 @@ namespace NetCoreApiBase.Repository
             return this._repositoryContext.Set<T>().Where(expression).AsNoTracking();
         }
 
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
             this._repositoryContext.Set<T>().Add(entity);
+            await this._repositoryContext.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             this._repositoryContext.Set<T>().Update(entity);
+            await this._repositoryContext.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             this._repositoryContext.Set<T>().Remove(entity);
+            await this._repositoryContext.SaveChangesAsync();
         }
     }
 }

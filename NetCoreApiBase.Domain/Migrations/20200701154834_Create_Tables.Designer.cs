@@ -9,8 +9,8 @@ using NetCoreApiBase.Domain;
 namespace NetCoreApiBase.Domain.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20200623211425_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200701154834_Create_Tables")]
+    partial class Create_Tables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
