@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NetCoreApiBase.Contracts;
 using NetCoreApiBase.Domain.DTO;
 using NetCoreApiBase.Domain.Models;
+using NetCoreApiBase.RepositoryADO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +29,15 @@ namespace netcore3_api_basicproject.Controllers
     {
         private IRepositoryWrapper _repoWrapper;
         private IMapper _mapper;
+        private readonly IEmployeeRepositoryADO _repositoryAdo;
 
         public CategoryController(IRepositoryWrapper repoWrapper,
-                                  IMapper mapper)
+                                  IMapper mapper,
+                                  IEmployeeRepositoryADO repositoryAdo)
         {
             this._repoWrapper = repoWrapper;
             this._mapper = mapper;
+            this._repositoryAdo = repositoryAdo;
         }
 
         [HttpGet]
@@ -49,6 +53,22 @@ namespace netcore3_api_basicproject.Controllers
                 //para trazer dados com paginação do asp.net core:
                 //https://code-maze.com/paging-aspnet-core-webapi/
                 //exemplos do automapper: https://code-maze.com/automapper-net-core/
+
+
+                var employee = new Employee()
+                {
+                    Id = 3,
+                    Name = "Quele doidinha",
+                    Position = "Assistent11111111",
+                    Office = "Vinhedo11111111",
+                    Age = 40,
+                    Salary = 20000
+                };
+
+                await this._repositoryAdo.Update(employee);
+
+
+                await this._repositoryAdo.Delete(employee);
 
 
                 var categories = await _repoWrapper.Category.FindAllAsync();

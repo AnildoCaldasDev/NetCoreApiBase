@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Api", "NetCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Domain", "NetCoreApiBase.Domain\NetCoreApiBase.Domain.csproj", "{B888D565-DC9B-4F43-8F95-FEEFA9D1522E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Contracts", "NetCoreApiBase.Contracts\NetCoreApiBase.Contracts.csproj", "{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Contracts", "NetCoreApiBase.Contracts\NetCoreApiBase.Contracts.csproj", "{F1DD5136-9FB6-4D89-80A8-A89C794C61EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.Repository", "NetCoreApiBase.Repository\NetCoreApiBase.Repository.csproj", "{B46A0680-F12F-44CD-9FF2-1980DA8873B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Repository", "NetCoreApiBase.Repository\NetCoreApiBase.Repository.csproj", "{B46A0680-F12F-44CD-9FF2-1980DA8873B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.RepositoryADO", "NetCoreApiBase.RepositoryADO\NetCoreApiBase.RepositoryADO.csproj", "{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B46A0680-F12F-44CD-9FF2-1980DA8873B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

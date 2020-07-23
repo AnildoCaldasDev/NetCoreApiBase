@@ -13,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using NetCoreApiBase.Domain;
 using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
+using NetCoreApiBase.Contracts;
+using NetCoreApiBase.RepositoryADO;
 
 namespace NetCoreApiBase.Api
 {
@@ -77,8 +79,11 @@ namespace NetCoreApiBase.Api
             //services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
             //services.AddScoped<DataContext, DataContext>();//ja é coberto no AddDbContext por default
 
+            services.AddScoped<IEmployeeRepositoryADO, EmployeeRepositoryADO>();
+
+
             //adding service of Repository Context:
-            services.AddDbContext<RepositoryContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            services.AddDbContext<RepositoryContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionStringEF")));
 
 
             //services.AddControllers();

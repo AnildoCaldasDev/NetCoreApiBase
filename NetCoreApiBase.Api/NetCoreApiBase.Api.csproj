@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NetCoreApiBase.RepositoryADO\NetCoreApiBase.RepositoryADO.csproj" />
     <ProjectReference Include="..\NetCoreApiBase.Repository\NetCoreApiBase.Repository.csproj" />
   </ItemGroup>
 
