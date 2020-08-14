@@ -17,6 +17,19 @@ namespace NetCoreApiBase.Api
                     .AllowAnyHeader()
                     );
             });
+
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("CorsPolicyForDashboard", builder =>
+            //        builder
+            //            .WithOrigins("http://localhost:4200/#/implementacoes/impressaoqrcode")
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader()
+            //            .AllowCredentials());
+            //});
+
+
         }
 
 

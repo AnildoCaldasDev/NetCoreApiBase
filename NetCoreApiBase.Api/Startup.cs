@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
 using NetCoreApiBase.Contracts;
 using NetCoreApiBase.RepositoryADO;
+using NetCoreApiBase.Api.Hubs;
+using NetCoreApiBase.Api.Services;
 
 namespace NetCoreApiBase.Api
 {
@@ -27,11 +29,12 @@ namespace NetCoreApiBase.Api
 
         public IConfiguration Configuration { get; }
 
+        readonly string CorsSpecificationOrigins = "_corsSpecificationOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors();
-            services.ConfigureCors();//added
+
             services.ConfigureIISIntegration();//added
 
             services.AddResponseCompression(options =>
@@ -86,11 +89,14 @@ namespace NetCoreApiBase.Api
             services.AddDbContext<RepositoryContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionStringEF")));
 
 
-            //services.AddControllers();
-
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiNetCore Info", Version = "v1" }); });
 
             services.AddSignalR();
+
+            services.AddHostedService<UpdateStockPriceHostedService>();
+
+            //alternative way of configure CORS:
+            services.ConfigureCors();//added
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,8 +109,6 @@ namespace NetCoreApiBase.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseCors("CorsPolicy");
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -123,12 +127,6 @@ namespace NetCoreApiBase.Api
 
             app.UseRouting();
 
-            //app.UseCors(x => x
-            //    .AllowAnyOrigin()
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader()
-            //);
-
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -138,6 +136,13 @@ namespace NetCoreApiBase.Api
                 endpoints.MapControllers();
                 //endpoints.MapHub<ChatHub>("/chatHub");
             });
+
+            //alternative way of setup cors:
+            //app.UseCors("CorsPolicyForDashboard");
+            app.UseCors("CorsPolicy");
+
+            app.UseSignalR(route => { route.MapHub<RealtimeBrokerHub>("/realtimebrokerhub"); });
+
         }
     }
 }

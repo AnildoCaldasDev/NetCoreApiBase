@@ -58,6 +58,22 @@ BEGIN
 	Delete FROM NetCoreBaseAdo.dbo.Employee where Id = @Id
 END;
 
+USE [NetCoreBaseAdo]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SpGetEmployeeById]
+(
+	@Id Int
+)
+AS
+BEGIN
+	SELECT * FROM NetCoreBaseAdo.dbo.Employee
+END;
+
+
 ------------------- teste scripts da base ------------------------
 exec dbo.SpGetEmployee
 
