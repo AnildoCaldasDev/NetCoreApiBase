@@ -141,8 +141,10 @@ namespace NetCoreApiBase.Api
             //app.UseCors("CorsPolicyForDashboard");
             app.UseCors("CorsPolicy");
 
-            app.UseSignalR(route => { route.MapHub<RealtimeBrokerHub>("/v1/realtimebrokerhub"); });
-
+            app.UseSignalR(route => {
+                route.MapHub<RealtimeBrokerHub>("/v1/realtimebrokerhub");
+                route.MapHub<ChatMessageHub>("/v1/chatmessagehub");
+            });
         }
     }
 }
