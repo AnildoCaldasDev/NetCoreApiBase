@@ -27,6 +27,22 @@ namespace netcore3_api_basicproject.Controllers
             this._mapper = mapper;
         }
 
+        //[HttpGet]
+        //[Route("")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<String>> Get()
+        //{
+        //    try
+        //    {
+        //      return Ok("Teste OK");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, "Internal Server Error: " + ex.Message);
+        //    }
+        //}
+
+
         [HttpGet]
         [Route("")]
         [AllowAnonymous]
@@ -34,15 +50,15 @@ namespace netcore3_api_basicproject.Controllers
         {
             try
             {
-               var products = await this._repoWrapper.
-                                    Product.
-                                    FindAll().
-                                    Include(x => x.Category).
-                                    ToListAsync();
+                var products = await this._repoWrapper.
+                                     Product.
+                                     FindAll().
+                                     Include(x => x.Category).
+                                     ToListAsync();
 
                 var productsDtoList = this._mapper.Map<IEnumerable<ProductDto>>(products);
 
-                return Ok(productsDtoList);
+                return Ok(new { total = productsDtoList.Count(), result = productsDtoList });
             }
             catch (Exception ex)
             {
@@ -100,8 +116,9 @@ namespace netcore3_api_basicproject.Controllers
 
         [HttpPost]
         [Route("")]
-        [Authorize(Roles = "Manager")]
-        public async Task<ActionResult<ProductDto>> Post([FromBody] ProductDto model)
+        //[Authorize(Roles = "Manager")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] ProductDto model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -115,7 +132,9 @@ namespace netcore3_api_basicproject.Controllers
 
                await _repoWrapper.Product.Create(productDomain);
 
-                return Ok(this._mapper.Map<ProductDto>(productDomain));
+                //return Ok(this._mapper.Map<ProductDto>(productDomain));
+                return Ok(new { result = true, message = "" });
+
             }
             catch (Exception ex)
             {
@@ -125,7 +144,9 @@ namespace netcore3_api_basicproject.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
+        [AllowAnonymous]
+
         public async Task<ActionResult<ProductDto>> Put(int id, [FromBody] ProductDto model)
         {
 
@@ -144,7 +165,8 @@ namespace netcore3_api_basicproject.Controllers
 
                 await _repoWrapper.Product.Update(productDomain);
 
-                return Ok(this._mapper.Map<ProductDto>(productDomain));
+                // return Ok(this._mapper.Map<ProductDto>(productDomain));
+                return Ok(new { result = true, message = "Produto Alterado com sucesso!" });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -158,8 +180,9 @@ namespace netcore3_api_basicproject.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "Manager")]
-        public async Task<ActionResult<ProductDto>> Delete(int id)
+        ///[Authorize(Roles = "Manager")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
             var products = await _repoWrapper.Product.FindByConditionAsync(x => x.Id == id);
 
@@ -170,7 +193,8 @@ namespace netcore3_api_basicproject.Controllers
             {
                await _repoWrapper.Product.Delete(products.FirstOrDefault());
 
-                return Ok(this._mapper.Map<ProductDto>(products.FirstOrDefault()));
+                //return Ok(this._mapper.Map<ProductDto>(products.FirstOrDefault()));
+                return Ok(new { result = true, message = "Produto Excluído com sucesso!" });
             }
             catch (DbUpdateConcurrencyException)
             {

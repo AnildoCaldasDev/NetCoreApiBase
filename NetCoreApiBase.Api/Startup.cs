@@ -48,6 +48,8 @@ namespace NetCoreApiBase.Api
 
             services.ConfigureRepositoryWrapper();
 
+            services.AddCors();
+
             services.AddControllers();
 
             services.AddAutoMapper(typeof(Startup));
@@ -95,8 +97,6 @@ namespace NetCoreApiBase.Api
 
             services.AddHostedService<UpdateStockPriceHostedService>();
 
-            //alternative way of configure CORS:
-            services.ConfigureCors();//added
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,6 +106,9 @@ namespace NetCoreApiBase.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -134,14 +137,10 @@ namespace NetCoreApiBase.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //endpoints.MapHub<ChatHub>("/chatHub");
             });
 
-            //alternative way of setup cors:
-            //app.UseCors("CorsPolicyForDashboard");
-            app.UseCors("CorsPolicy");
-
-            app.UseSignalR(route => {
+            app.UseSignalR(route =>
+            {
                 route.MapHub<RealtimeBrokerHub>("/v1/realtimebrokerhub");
                 route.MapHub<ChatMessageHub>("/v1/chatmessagehub");
             });
