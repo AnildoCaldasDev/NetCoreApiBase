@@ -108,6 +108,39 @@ namespace netcore3_api_basicproject.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("UploadProfileImage")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> UploadProfileImage([FromBody] FileUploadDto fileUploadModel)
+        {
+            if (fileUploadModel == null)
+                return BadRequest("Imagem não foi enviada!");
+            try
+            {
+                var users = await _repoWrapper.User.FindAllAsync();
+
+                if (users == null || users.Count() <= 0)
+                    return NotFound(new { message = "Usuário ou senha inválidos!" });
+
+                var userDefault = users.FirstOrDefault();
+
+                if(userDefault != null)
+                {
+                    userDefault.ImageBaseData = fileUploadModel.ImageBaseData;
+                    await _repoWrapper.User.Update(userDefault);
+                    await _repoWrapper.SaveAsync();
+                    return Ok(true);
+                }
+
+                return BadRequest("User Not Found");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
+        }
+
         // METHODS ONLY FOR TESTS:
         //[HttpGet]
         //[Route("Anonimo")]

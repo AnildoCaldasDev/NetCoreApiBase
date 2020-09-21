@@ -18,5 +18,7 @@ namespace NetCoreApiBase.Domain.DTO
         public string Password { get; set; }
 
         public string Role { get; set; }
+
+        public string ImageBaseData { get; set; }
     }
 }
