@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Contracts", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.Repository", "NetCoreApiBase.Repository\NetCoreApiBase.Repository.csproj", "{B46A0680-F12F-44CD-9FF2-1980DA8873B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApiBase.RepositoryADO", "NetCoreApiBase.RepositoryADO\NetCoreApiBase.RepositoryADO.csproj", "{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBase.RepositoryADO", "NetCoreApiBase.RepositoryADO\NetCoreApiBase.RepositoryADO.csproj", "{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreApiBaseMongo.Api", "NetCoreApiBaseMongo.Api\NetCoreApiBaseMongo.Api.csproj", "{9B5217C7-89D5-48E5-AA76-08C99A6C4CE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C580717-DF9F-45F8-976D-2D1D09CCDAD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B5217C7-89D5-48E5-AA76-08C99A6C4CE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5217C7-89D5-48E5-AA76-08C99A6C4CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5217C7-89D5-48E5-AA76-08C99A6C4CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5217C7-89D5-48E5-AA76-08C99A6C4CE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using NetCoreApiBase.Contracts;
+using NetCoreApiBase.Domain;
 using NetCoreApiBase.Domain.DTO;
 using NetCoreApiBase.Domain.Models;
 using System;
@@ -205,5 +206,82 @@ namespace netcore3_api_basicproject.Controllers
                 return StatusCode(500, "Internal Server Error: " + ex.Message);
             }
         }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("GetTeste")]
+        public ActionResult<Product> GetTeste()
+        {
+            int[] scores = { 90, 71, 82, 93, 75, 82 };
+
+            IEnumerable<int> query = from score in scores where score > 80 orderby score descending select score;
+
+            var teste = query;
+
+            foreach (int testScore in query)
+            {
+                Console.WriteLine(testScore);
+            }
+
+
+            List<City> citiesSource = new List<City>();
+            citiesSource.Add(new City() { Id = 1, Population = 10000 });
+            citiesSource.Add(new City() { Id = 2, Population = 2344 });
+            citiesSource.Add(new City() { Id = 3, Population = 4555555 });
+            citiesSource.Add(new City() { Id = 4, Population = 21345 });
+            citiesSource.Add(new City() { Id = 5, Population = 245 });
+            citiesSource.Add(new City() { Id = 6, Population = 5000 });
+
+
+            ////ExemploQuery Syntax:
+            //IEnumerable<City> majorCities = from city in citiesSource where city.Population > 9000 group city by city.Population into biggestCities
+            //                                from smallCities in citiesSource where smallCities.Population < 9000 group smallCities by smallCities.Population into smallersCities
+            //                                select
+
+
+            ////Method base-syntax:
+            //IEnumerable<City> majorCities2 = citiesSource.Where(x => x.Population > 9000);
+
+
+
+
+
+            //IEnumerable<Product> list = _repoWrapper.Product.FindAll().Where(p => p.CategoryId == 1);
+            //list = list.Take<Product>(3);
+
+            //var testeIEnume = list.FirstOrDefault();
+
+
+            IQueryable<Product> queryP = _repoWrapper.Product.FindAll().Where(p => p.CategoryId == 1);
+            queryP = queryP.Take<Product>(3);
+
+            List<Product> novLista = new List<Product>();
+
+            foreach (var item in queryP)
+            {
+                novLista.Add(item);
+            }
+
+            return novLista.FirstOrDefault();
+
+        }
+
+        //[AllowAnonymous]
+        //[HttpGet]
+        //[Route("GetTesteEmployee")]
+        //public ActionResult<dynamic> GetTesteEmployee()
+        //{
+        //    Nort
+        //}
     }
+
+    public class City
+    {
+        public int Id { get; set; }
+        public int Population { get; set; }
+
+    }
+
 }
+

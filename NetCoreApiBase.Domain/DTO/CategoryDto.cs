@@ -11,5 +11,6 @@ namespace NetCoreApiBase.Domain.DTO
         [MaxLength(60, ErrorMessage = "Deve conter entre 3 e 60 caracteres")]
         [MinLength(3, ErrorMessage = "Deve conter no minimo 3 caracteres")]
         public string Title { get; set; }
+        public string Tag { get; set; }
     }
 }

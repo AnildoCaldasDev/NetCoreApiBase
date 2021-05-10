@@ -15,6 +15,8 @@ namespace NetCoreApiBase.Repository
 
         public async Task<IEnumerable<Product>> FindAllAsync()
         {
+            var teste = await this.TesteFind();
+
             return await base.FindAll().ToListAsync();
         }
 
@@ -27,5 +29,12 @@ namespace NetCoreApiBase.Repository
         {
             return await base.FindByCondition(x => x.CategoryId == categoryId).AnyAsync();
         }
+
+        private async Task<IList<Product>> TesteFind()
+        {
+            return await base.FindAll().ToListAsync();
+        }
+
+
     }
 }

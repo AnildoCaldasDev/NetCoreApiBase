@@ -43,7 +43,7 @@ namespace netcore3_api_basicproject.Controllers
         [HttpGet]
         [Route("")]
         [AllowAnonymous]
-        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)]
+        //[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)]
         //remove o cache individualmente, caso use o cache no config do startup
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<ActionResult<List<CategoryDto>>> Get()
@@ -55,20 +55,20 @@ namespace netcore3_api_basicproject.Controllers
                 //exemplos do automapper: https://code-maze.com/automapper-net-core/
 
 
-                var employee = new Employee()
-                {
-                    Id = 3,
-                    Name = "Quele doidinha",
-                    Position = "Assistent11111111",
-                    Office = "Vinhedo11111111",
-                    Age = 40,
-                    Salary = 20000
-                };
+                //var employee = new Employee()
+                //{
+                //    Id = 3,
+                //    Name = "Quele doidinha",
+                //    Position = "Assistent11111111",
+                //    Office = "Vinhedo11111111",
+                //    Age = 40,
+                //    Salary = 20000
+                //};
 
-                await this._repositoryAdo.Update(employee);
+               // await this._repositoryAdo.Update(employee);
 
 
-                await this._repositoryAdo.Delete(employee);
+               // await this._repositoryAdo.Delete(employee);
 
 
                 var categories = await _repoWrapper.Category.FindAllAsync();
